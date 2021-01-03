@@ -27,6 +27,17 @@ namespace kwisatz
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowLocalHost",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()// WithOrigins("http://localhost:5500")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                            //.AllowCredentials();
+                    });
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -51,6 +62,8 @@ namespace kwisatz
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowLocalHost");
 
             app.UseAuthorization();
 
